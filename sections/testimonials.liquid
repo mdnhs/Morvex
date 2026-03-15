@@ -1,217 +1,310 @@
 {% comment %}
-  Testimonials section — customer quotes with star ratings.
-  Grid on desktop, horizontal scroll on mobile.
+  Testimonials / Press section — media publication quotes carousel
+  Supports both "quote" blocks (press) and "testimonial" blocks (customer)
 {% endcomment %}
 
+{%- liquid
+  assign bg = section.settings.background | default: 'light'
+-%}
+
+<style>
+  .testimonials-{{ section.id }} {
+    padding: {{ section.settings.padding_top | default: 80 }}px 0 {{ section.settings.padding_bottom | default: 80 }}px;
+    background: {% if bg == 'dark' %}#1c1c1c{% elsif bg == 'alt' %}#f7f5f2{% else %}#fff{% endif %};
+    color: {% if bg == 'dark' %}#fff{% else %}#1c1c1c{% endif %};
+  }
+  .testimonials-{{ section.id }}__header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .testimonials-{{ section.id }}__eyebrow {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.6){% else %}#6b6b6b{% endif %};
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .testimonials-{{ section.id }}__heading {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: {% if bg == 'dark' %}#fff{% else %}#1c1c1c{% endif %};
+    margin: 0;
+  }
+  /* Publication logos row */
+  .testimonials-{{ section.id }}__logos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    padding: 0 2rem;
+  }
+  .testimonials-{{ section.id }}__logo-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    opacity: 0.35;
+    transition: opacity 0.25s;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(1rem, 1.8vw, 1.375rem);
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: {% if bg == 'dark' %}#fff{% else %}#1c1c1c{% endif %};
+    line-height: 1;
+    position: relative;
+  }
+  .testimonials-{{ section.id }}__logo-btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.3s;
+  }
+  .testimonials-{{ section.id }}__logo-btn:hover { opacity: 0.65; }
+  .testimonials-{{ section.id }}__logo-btn.is-active { opacity: 1; }
+  .testimonials-{{ section.id }}__logo-btn.is-active::after { width: 100%; }
+  .testimonials-{{ section.id }}__logo-img {
+    max-height: 32px;
+    width: auto;
+    display: block;
+    filter: {% if bg == 'dark' %}brightness(0) invert(1){% else %}brightness(0){% endif %};
+  }
+  /* Quote display */
+  .testimonials-{{ section.id }}__quotes {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 2rem;
+    position: relative;
+    min-height: 180px;
+  }
+  .testimonials-{{ section.id }}__quote {
+    display: none;
+  }
+  .testimonials-{{ section.id }}__quote.is-active {
+    display: block;
+  }
+  .testimonials-{{ section.id }}__mark {
+    font-family: Georgia, serif;
+    font-size: 4rem;
+    line-height: 0.5;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.2){% else %}#e8e8e8{% endif %};
+    display: block;
+    margin-bottom: 1.5rem;
+    user-select: none;
+  }
+  .testimonials-{{ section.id }}__text {
+    font-family: 'Nunito', sans-serif;
+    font-size: clamp(1rem, 1.6vw, 1.1875rem);
+    font-weight: 400;
+    line-height: 1.7;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.88){% else %}#1c1c1c{% endif %};
+    margin: 0 0 1.5rem;
+    font-style: italic;
+  }
+  .testimonials-{{ section.id }}__source {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.55){% else %}#9b9b9b{% endif %};
+    margin: 0;
+  }
+  /* Star rating (for testimonial blocks) */
+  .testimonials-{{ section.id }}__stars {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+  .testimonials-{{ section.id }}__star {
+    color: #d4a96a;
+    font-size: 1rem;
+    line-height: 1;
+  }
+  /* Author */
+  .testimonials-{{ section.id }}__author {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.7){% else %}#1c1c1c{% endif %};
+    margin: 0 0 0.25rem;
+  }
+  .testimonials-{{ section.id }}__author-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.8rem;
+    color: {% if bg == 'dark' %}rgba(255,255,255,0.45){% else %}#9b9b9b{% endif %};
+    margin: 0;
+  }
+</style>
+
 <section
-  class="testimonials section"
+  class="testimonials-{{ section.id }}"
   id="section-testimonials-{{ section.id }}"
-  aria-label="{{ section.settings.heading | default: 'Customer testimonials' | escape }}"
+  aria-label="{{ section.settings.heading | default: 'Press' | escape }}"
 >
-  <div class="container">
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+    <div class="testimonials-{{ section.id }}__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="testimonials-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="testimonials-{{ section.id }}__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
 
-    <!-- Section Header -->
-    {%- if section.settings.heading != blank -%}
-      <div class="section-header fade-in">
-        {%- if section.settings.eyebrow != blank -%}
-          <p class="section-header__eyebrow">{{ section.settings.eyebrow }}</p>
-        {%- endif -%}
-        <h2 class="section-header__title">{{ section.settings.heading }}</h2>
-        {%- if section.settings.subheading != blank -%}
-          <p class="section-header__subtitle">{{ section.settings.subheading }}</p>
-        {%- endif -%}
-      </div>
-    {%- endif -%}
+  {%- if section.blocks.size > 0 -%}
+    <!-- Publication name switcher row -->
+    <div class="testimonials-{{ section.id }}__logos" role="tablist">
+      {%- for block in section.blocks -%}
+        <button
+          class="testimonials-{{ section.id }}__logo-btn{% if forloop.first %} is-active{% endif %}"
+          type="button"
+          role="tab"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          data-testimonial-tab="{{ forloop.index0 }}"
+          data-section="{{ section.id }}"
+        >
+          {%- if block.settings.logo != blank -%}
+            <img
+              class="testimonials-{{ section.id }}__logo-img"
+              src="{{ block.settings.logo | image_url: height: 32 }}"
+              alt="{{ block.settings.publication_name | escape }}"
+              loading="lazy"
+            >
+          {%- else -%}
+            {{ block.settings.publication_name | default: 'Press' }}
+          {%- endif -%}
+        </button>
+      {%- endfor -%}
+    </div>
 
-    <!-- Desktop Grid -->
-    {%- if section.blocks.size > 0 -%}
-      <div
-        class="testimonials__grid"
-        role="list"
-        aria-label="{{ 'sections.testimonials.list_label' | t | default: 'Customer reviews' }}"
-      >
-        {%- for block in section.blocks -%}
-          {%- assign rating = block.settings.rating | default: 5 -%}
-          <article
-            class="testimonial-card fade-in fade-in--delay-{{ forloop.index | modulo: 3 | plus: 1 }}"
-            {{ block.shopify_attributes }}
-            role="listitem"
-          >
-            <!-- Stars -->
-            <div class="testimonial-card__stars" aria-label="{{ rating }} out of 5 stars" role="img">
-              {%- for i in (1..5) -%}
-                {%- if i <= rating -%}
-                  {%- render 'icon', icon: 'star', size: 16, class: 'testimonial-card__star' -%}
-                {%- else -%}
-                  {%- render 'icon', icon: 'star-empty', size: 16, class: 'testimonial-card__star testimonial-card__star--empty' -%}
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-
-            <!-- Quote -->
-            {%- if block.settings.quote != blank -%}
-              <blockquote class="testimonial-card__quote">
-                {{ block.settings.quote | escape }}
+    <!-- Quote display -->
+    <div class="testimonials-{{ section.id }}__quotes" aria-live="polite">
+      {%- for block in section.blocks -%}
+        <div
+          class="testimonials-{{ section.id }}__quote{% if forloop.first %} is-active{% endif %}"
+          role="tabpanel"
+          {{ block.shopify_attributes }}
+        >
+          {%- liquid
+            assign block_type = block.type
+          -%}
+          {%- if block_type == 'quote' -%}
+            <span class="testimonials-{{ section.id }}__mark" aria-hidden="true">&ldquo;</span>
+            {%- if block.settings.quote_text != blank -%}
+              <blockquote class="testimonials-{{ section.id }}__text">
+                {{ block.settings.quote_text }}
               </blockquote>
             {%- endif -%}
-
-            <!-- Author -->
-            <div class="testimonial-card__author">
-              {%- if block.settings.author != blank -%}
-                <p class="testimonial-card__name">{{ block.settings.author }}</p>
-              {%- endif -%}
-              {%- if block.settings.author_title != blank -%}
-                <p class="testimonial-card__role">{{ block.settings.author_title }}</p>
-              {%- endif -%}
-            </div>
-
-          </article>
-        {%- endfor -%}
-      </div>
-
-      <!-- Mobile horizontal scroll -->
-      <div
-        class="testimonials__scroll"
-        role="list"
-        aria-label="{{ 'sections.testimonials.list_label' | t | default: 'Customer reviews' }}"
-      >
-        {%- for block in section.blocks -%}
-          {%- assign rating = block.settings.rating | default: 5 -%}
-          <article
-            class="testimonial-card"
-            {{ block.shopify_attributes }}
-            role="listitem"
-          >
-            <div class="testimonial-card__stars" aria-label="{{ rating }} out of 5 stars" role="img">
-              {%- for i in (1..5) -%}
-                {%- if i <= rating -%}
-                  {%- render 'icon', icon: 'star', size: 16, class: 'testimonial-card__star' -%}
-                {%- else -%}
-                  {%- render 'icon', icon: 'star-empty', size: 16, class: 'testimonial-card__star testimonial-card__star--empty' -%}
-                {%- endif -%}
-              {%- endfor -%}
-            </div>
-            {%- if block.settings.quote != blank -%}
-              <blockquote class="testimonial-card__quote">{{ block.settings.quote | escape }}</blockquote>
+            {%- if block.settings.publication_detail != blank or block.settings.publication_name != blank -%}
+              <p class="testimonials-{{ section.id }}__source">
+                — {{ block.settings.publication_detail | default: block.settings.publication_name }}
+              </p>
             {%- endif -%}
-            <div class="testimonial-card__author">
-              {%- if block.settings.author != blank -%}
-                <p class="testimonial-card__name">{{ block.settings.author }}</p>
-              {%- endif -%}
-              {%- if block.settings.author_title != blank -%}
-                <p class="testimonial-card__role">{{ block.settings.author_title }}</p>
-              {%- endif -%}
-            </div>
-          </article>
-        {%- endfor -%}
-      </div>
+          {%- elsif block_type == 'testimonial' -%}
+            {%- assign rating = block.settings.rating | default: 5 -%}
+            {%- if rating > 0 -%}
+              <div class="testimonials-{{ section.id }}__stars" aria-label="{{ rating }} out of 5 stars">
+                {%- for i in (1..5) -%}
+                  <span class="testimonials-{{ section.id }}__star">{% if i <= rating %}★{% else %}☆{% endif %}</span>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+            <span class="testimonials-{{ section.id }}__mark" aria-hidden="true">&ldquo;</span>
+            {%- if block.settings.quote != blank -%}
+              <blockquote class="testimonials-{{ section.id }}__text">{{ block.settings.quote }}</blockquote>
+            {%- endif -%}
+            {%- if block.settings.author != blank -%}
+              <p class="testimonials-{{ section.id }}__author">{{ block.settings.author }}</p>
+            {%- endif -%}
+            {%- if block.settings.author_title != blank -%}
+              <p class="testimonials-{{ section.id }}__author-title">{{ block.settings.author_title }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
 
-    {%- else -%}
-      <!-- Editor placeholder -->
-      <p style="text-align:center;color:var(--color-text-lighter);padding:var(--space-12) 0;">
-        {{ 'sections.testimonials.add_blocks' | t | default: 'Add testimonial blocks in the section settings.' }}
-      </p>
-    {%- endif -%}
-
-  </div>
 </section>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('[data-testimonial-tab][data-section="{{ section.id }}"]');
+  var quotes = document.querySelectorAll('#section-testimonials-{{ section.id }} .testimonials-{{ section.id }}__quote');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var idx = parseInt(tab.dataset.testimonialTab);
+      tabs.forEach(function(t){ t.classList.remove('is-active'); t.setAttribute('aria-selected','false'); });
+      quotes.forEach(function(q){ q.classList.remove('is-active'); });
+      tab.classList.add('is-active');
+      tab.setAttribute('aria-selected','true');
+      if (quotes[idx]) quotes[idx].classList.add('is-active');
+    });
+  });
+})();
+</script>
 
 {% schema %}
 {
-  "name": "Testimonials",
+  "name": "Testimonials / Press",
   "tag": "section",
   "class": "section-testimonials",
-  "max_blocks": 6,
+  "max_blocks": 8,
   "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow text",
-      "default": "What Our Customers Say"
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Loved by Thousands"
-    },
-    {
-      "type": "text",
-      "id": "subheading",
-      "label": "Subheading"
-    }
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The Press" },
+    { "type": "select", "id": "background", "label": "Background", "options": [{"value":"light","label":"White"},{"value":"alt","label":"Off-white"},{"value":"dark","label":"Dark"}], "default": "light" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 120, "step": 10, "default": 80, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 120, "step": 10, "default": 80, "unit": "px" }
   ],
   "blocks": [
     {
-      "type": "testimonial",
-      "name": "Testimonial",
+      "type": "quote",
+      "name": "Press quote",
       "settings": [
-        {
-          "type": "text",
-          "id": "quote",
-          "label": "Quote",
-          "default": "The quality is exceptional. I've never owned anything quite like it — the craftsmanship speaks for itself. Truly a luxury experience from purchase to delivery."
-        },
-        {
-          "type": "text",
-          "id": "author",
-          "label": "Author name",
-          "default": "Sophia L."
-        },
-        {
-          "type": "text",
-          "id": "author_title",
-          "label": "Author title or location",
-          "default": "Verified Customer"
-        },
-        {
-          "type": "range",
-          "id": "rating",
-          "min": 1,
-          "max": 5,
-          "step": 1,
-          "default": 5,
-          "label": "Star rating"
-        }
+        { "type": "image_picker", "id": "logo", "label": "Publication logo (optional)" },
+        { "type": "text", "id": "publication_name", "label": "Publication name", "default": "Vogue" },
+        { "type": "textarea", "id": "quote_text", "label": "Quote", "default": "A brand redefining modern luxury." },
+        { "type": "text", "id": "publication_detail", "label": "Source detail", "default": "Vogue Magazine" }
+      ]
+    },
+    {
+      "type": "testimonial",
+      "name": "Customer testimonial",
+      "settings": [
+        { "type": "text", "id": "publication_name", "label": "Author name (shown in tab)", "default": "Customer" },
+        { "type": "textarea", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "author", "label": "Author" },
+        { "type": "text", "id": "author_title", "label": "Author title", "default": "Verified Customer" },
+        { "type": "range", "id": "rating", "label": "Star rating", "min": 1, "max": 5, "step": 1, "default": 5 }
       ]
     }
   ],
-  "presets": [
-    {
-      "name": "Testimonials",
-      "settings": {
-        "heading": "Loved by Thousands"
-      },
-      "blocks": [
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "The quality is exceptional. I've never owned anything quite like it — the craftsmanship speaks for itself.",
-            "author": "Sophia L.",
-            "author_title": "Verified Customer",
-            "rating": 5
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "From the moment it arrived, I knew this was something special. The packaging alone told me everything about the brand's values.",
-            "author": "Marcus T.",
-            "author_title": "Verified Customer",
-            "rating": 5
-          }
-        },
-        {
-          "type": "testimonial",
-          "settings": {
-            "quote": "I've been searching for this level of quality for years. The attention to detail is extraordinary. This is my fifth purchase and each one has been perfect.",
-            "author": "Isabelle R.",
-            "author_title": "Loyal Customer",
-            "rating": 5
-          }
-        }
-      ]
-    }
-  ]
+  "presets": [{
+    "name": "Testimonials / Press",
+    "blocks": [
+      { "type": "quote", "settings": { "publication_name": "GQ", "quote_text": "A brand redefining modern luxury.", "publication_detail": "GQ Magazine" } },
+      { "type": "quote", "settings": { "publication_name": "Forbes", "quote_text": "Named one of the most innovative luxury brands.", "publication_detail": "Forbes" } }
+    ]
+  }]
 }
 {% endschema %}

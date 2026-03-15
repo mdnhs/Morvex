@@ -1,0 +1,255 @@
+{% comment %}
+  Before/After Image Slider — colour comparison with draggable divider
+{% endcomment %}
+
+<style>
+  .ba-{{ section.id }} {
+    padding: 80px 0;
+    background: #fff;
+  }
+  .ba-{{ section.id }}__header {
+    text-align: center;
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+  }
+  .ba-{{ section.id }}__eyebrow {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+  .ba-{{ section.id }}__heading {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #1c1c1c;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .ba-{{ section.id }}__container {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    aspect-ratio: 16/7;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    background: #f0eded;
+  }
+  .ba-{{ section.id }}__left,
+  .ba-{{ section.id }}__right {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .ba-{{ section.id }}__left img,
+  .ba-{{ section.id }}__right img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+  .ba-{{ section.id }}__right {
+    clip-path: inset(0 50% 0 0);
+  }
+  .ba-{{ section.id }}__label {
+    position: absolute;
+    bottom: 24px;
+    background: rgba(255,255,255,0.92);
+    padding: 10px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .ba-{{ section.id }}__label--left { left: 24px; }
+  .ba-{{ section.id }}__label--right { right: 24px; text-align: right; }
+  .ba-{{ section.id }}__label-name {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1c1c1c;
+  }
+  .ba-{{ section.id }}__label-link {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem;
+    color: #6b6b6b;
+    text-decoration: none;
+    pointer-events: all;
+    border-bottom: 1px solid #e8e8e8;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .ba-{{ section.id }}__label-link:hover { color: #1c1c1c; border-color: #1c1c1c; }
+  .ba-{{ section.id }}__divider {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    z-index: 5;
+    box-shadow: 0 0 8px rgba(0,0,0,0.25);
+    pointer-events: none;
+  }
+  .ba-{{ section.id }}__handle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 52px;
+    height: 52px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    pointer-events: none;
+  }
+  .ba-{{ section.id }}__handle-icon {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: #1c1c1c;
+    font-size: 16px;
+    line-height: 1;
+  }
+  @media (max-width: 767px) {
+    .ba-{{ section.id }} { padding: 60px 0; }
+    .ba-{{ section.id }}__container { aspect-ratio: 4/5; }
+    .ba-{{ section.id }}__handle { width: 40px; height: 40px; }
+    .ba-{{ section.id }}__label { bottom: 12px; padding: 8px 12px; }
+    .ba-{{ section.id }}__label--left { left: 12px; }
+    .ba-{{ section.id }}__label--right { right: 12px; }
+  }
+</style>
+
+<section class="ba-{{ section.id }}">
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
+    <div class="ba-{{ section.id }}__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="ba-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="ba-{{ section.id }}__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div
+    class="ba-{{ section.id }}__container"
+    id="ba-container-{{ section.id }}"
+    tabindex="0"
+    role="img"
+    aria-label="{{ section.settings.heading | escape }}"
+  >
+    <div class="ba-{{ section.id }}__left">
+      {%- if section.settings.image_left != blank -%}
+        <img src="{{ section.settings.image_left | image_url: width: 1400 }}" alt="{{ section.settings.left_label | escape }}" loading="lazy">
+      {%- else -%}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#a8c5b0,#7a9e85);"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="ba-{{ section.id }}__right" id="ba-right-{{ section.id }}">
+      {%- if section.settings.image_right != blank -%}
+        <img src="{{ section.settings.image_right | image_url: width: 1400 }}" alt="{{ section.settings.right_label | escape }}" loading="lazy">
+      {%- else -%}
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#6b8cba,#4a6d9e);"></div>
+      {%- endif -%}
+    </div>
+
+    <div class="ba-{{ section.id }}__divider" id="ba-divider-{{ section.id }}">
+      <div class="ba-{{ section.id }}__handle">
+        <span class="ba-{{ section.id }}__handle-icon" aria-hidden="true">&#8592; &#8594;</span>
+      </div>
+    </div>
+
+    {%- if section.settings.left_label != blank -%}
+      <div class="ba-{{ section.id }}__label ba-{{ section.id }}__label--left">
+        <span class="ba-{{ section.id }}__label-name">{{ section.settings.left_label }}</span>
+        {%- if section.settings.left_link_url != blank and section.settings.left_link_label != blank -%}
+          <a class="ba-{{ section.id }}__label-link" href="{{ section.settings.left_link_url }}">{{ section.settings.left_link_label }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.right_label != blank -%}
+      <div class="ba-{{ section.id }}__label ba-{{ section.id }}__label--right">
+        <span class="ba-{{ section.id }}__label-name">{{ section.settings.right_label }}</span>
+        {%- if section.settings.right_link_url != blank and section.settings.right_link_label != blank -%}
+          <a class="ba-{{ section.id }}__label-link" href="{{ section.settings.right_link_url }}">{{ section.settings.right_link_label }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+<script>
+(function(){
+  var container = document.getElementById('ba-container-{{ section.id }}');
+  var right = document.getElementById('ba-right-{{ section.id }}');
+  var divider = document.getElementById('ba-divider-{{ section.id }}');
+  if (!container || !right || !divider) return;
+  var dragging = false;
+  var pct = 50;
+  function set(p) {
+    p = Math.max(2, Math.min(98, p));
+    pct = p;
+    right.style.clipPath = 'inset(0 ' + (100-p).toFixed(2) + '% 0 0)';
+    divider.style.left = p + '%';
+  }
+  function getP(cx) {
+    var r = container.getBoundingClientRect();
+    return ((cx - r.left) / r.width) * 100;
+  }
+  container.addEventListener('mousedown', function(e){ if(e.button!==0)return; dragging=true; set(getP(e.clientX)); e.preventDefault(); });
+  document.addEventListener('mousemove', function(e){ if(dragging) set(getP(e.clientX)); });
+  document.addEventListener('mouseup', function(){ dragging=false; });
+  container.addEventListener('touchstart', function(e){ dragging=true; set(getP(e.touches[0].clientX)); }, {passive:true});
+  document.addEventListener('touchmove', function(e){ if(dragging) set(getP(e.touches[0].clientX)); }, {passive:true});
+  document.addEventListener('touchend', function(){ dragging=false; });
+  container.addEventListener('keydown', function(e){
+    if(e.key==='ArrowLeft'){ set(pct-2); e.preventDefault(); }
+    else if(e.key==='ArrowRight'){ set(pct+2); e.preventDefault(); }
+  });
+  set(50);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Before / After Slider",
+  "tag": "section",
+  "class": "section-before-after",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Choose your colour" },
+    { "type": "header", "content": "Left image" },
+    { "type": "image_picker", "id": "image_left", "label": "Left image" },
+    { "type": "text", "id": "left_label", "label": "Left label", "default": "Ivory" },
+    { "type": "text", "id": "left_link_label", "label": "Left link label" },
+    { "type": "url", "id": "left_link_url", "label": "Left link URL" },
+    { "type": "header", "content": "Right image" },
+    { "type": "image_picker", "id": "image_right", "label": "Right image" },
+    { "type": "text", "id": "right_label", "label": "Right label", "default": "Noir" },
+    { "type": "text", "id": "right_link_label", "label": "Right link label" },
+    { "type": "url", "id": "right_link_url", "label": "Right link URL" }
+  ],
+  "presets": [{ "name": "Before / After Slider" }]
+}
+{% endschema %}

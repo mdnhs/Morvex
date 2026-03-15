@@ -1,0 +1,245 @@
+{% comment %}
+  Sale Banner — full-width with countdown timer and CTA
+{% endcomment %}
+
+{%- liquid
+  assign overlay = section.settings.overlay_opacity | default: 50
+  assign overlay_alpha = overlay | times: 1.0 | divided_by: 100
+  assign min_h = section.settings.min_height | default: 600
+-%}
+
+<style>
+  .sale-banner-{{ section.id }} {
+    position: relative;
+    min-height: {{ min_h }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #1c1c1c;
+  }
+  .sale-banner-{{ section.id }}__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .sale-banner-{{ section.id }}__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,{{ overlay_alpha }});
+    z-index: 1;
+  }
+  .sale-banner-{{ section.id }}__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    padding: 4rem 2rem;
+    max-width: 720px;
+  }
+  .sale-banner-{{ section.id }}__eyebrow {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 1.25rem;
+    display: block;
+  }
+  .sale-banner-{{ section.id }}__heading {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 0 0 1.25rem;
+    line-height: 1.1;
+  }
+  .sale-banner-{{ section.id }}__desc {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    color: rgba(255,255,255,0.8);
+    margin: 0 0 2.5rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  /* Countdown */
+  .sale-countdown-{{ section.id }} {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .sale-countdown-{{ section.id }}__item {
+    text-align: center;
+    min-width: 60px;
+  }
+  .sale-countdown-{{ section.id }}__num {
+    display: block;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    line-height: 1;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .sale-countdown-{{ section.id }}__sep {
+    display: inline-block;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    line-height: 1;
+    margin-top: 0;
+    align-self: flex-start;
+    padding-top: 0.2rem;
+  }
+  .sale-countdown-{{ section.id }}__label {
+    display: block;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-top: 0.5rem;
+  }
+  .sale-banner-{{ section.id }}__btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: #fff;
+    color: #1c1c1c;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1.5px solid #fff;
+    transition: background 0.3s, color 0.3s;
+  }
+  .sale-banner-{{ section.id }}__btn:hover {
+    background: transparent;
+    color: #fff;
+  }
+</style>
+
+<section class="sale-banner-{{ section.id }}" id="sale-banner-{{ section.id }}">
+
+  {%- if section.settings.image != blank -%}
+    <img
+      class="sale-banner-{{ section.id }}__bg"
+      src="{{ section.settings.image | image_url: width: 1920 }}"
+      alt=""
+      loading="lazy"
+      width="1920"
+      aria-hidden="true"
+    >
+  {%- endif -%}
+
+  <div class="sale-banner-{{ section.id }}__overlay" aria-hidden="true"></div>
+
+  <div class="sale-banner-{{ section.id }}__content">
+    {%- if section.settings.eyebrow != blank -%}
+      <span class="sale-banner-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="sale-banner-{{ section.id }}__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.description != blank -%}
+      <p class="sale-banner-{{ section.id }}__desc">{{ section.settings.description }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.end_date != blank -%}
+      <div
+        class="sale-countdown-{{ section.id }}"
+        data-end="{{ section.settings.end_date }}"
+        id="sale-countdown-{{ section.id }}"
+        aria-live="polite"
+        aria-label="Sale countdown"
+      >
+        <div class="sale-countdown-{{ section.id }}__item">
+          <span class="sale-countdown-{{ section.id }}__num" data-days>00</span>
+          <span class="sale-countdown-{{ section.id }}__label">Days</span>
+        </div>
+        <span class="sale-countdown-{{ section.id }}__sep" aria-hidden="true">:</span>
+        <div class="sale-countdown-{{ section.id }}__item">
+          <span class="sale-countdown-{{ section.id }}__num" data-hours>00</span>
+          <span class="sale-countdown-{{ section.id }}__label">Hours</span>
+        </div>
+        <span class="sale-countdown-{{ section.id }}__sep" aria-hidden="true">:</span>
+        <div class="sale-countdown-{{ section.id }}__item">
+          <span class="sale-countdown-{{ section.id }}__num" data-minutes>00</span>
+          <span class="sale-countdown-{{ section.id }}__label">Mins</span>
+        </div>
+        <span class="sale-countdown-{{ section.id }}__sep" aria-hidden="true">:</span>
+        <div class="sale-countdown-{{ section.id }}__item">
+          <span class="sale-countdown-{{ section.id }}__num" data-seconds>00</span>
+          <span class="sale-countdown-{{ section.id }}__label">Secs</span>
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <a
+        href="{{ section.settings.button_link | default: '/collections/all' }}"
+        class="sale-banner-{{ section.id }}__btn"
+      >
+        {{ section.settings.button_label }}
+      </a>
+    {%- endif -%}
+  </div>
+
+</section>
+
+{%- if section.settings.end_date != blank -%}
+<script>
+(function(){
+  var el = document.getElementById('sale-countdown-{{ section.id }}');
+  if (!el) return;
+  var target = new Date(el.dataset.end).getTime();
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function update(){
+    var diff = target - Date.now();
+    if (diff <= 0) { el.textContent = 'Sale ended'; return; }
+    el.querySelector('[data-days]').textContent = pad(Math.floor(diff/86400000));
+    el.querySelector('[data-hours]').textContent = pad(Math.floor((diff%86400000)/3600000));
+    el.querySelector('[data-minutes]').textContent = pad(Math.floor((diff%3600000)/60000));
+    el.querySelector('[data-seconds]').textContent = pad(Math.floor((diff%60000)/1000));
+  }
+  update();
+  setInterval(update, 1000);
+})();
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Sale Banner",
+  "tag": "section",
+  "class": "section-sale-banner",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Limited time only" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Super Sale — Up to 40% off" },
+    { "type": "textarea", "id": "description", "label": "Description", "default": "Discover our exclusive selection at exceptional prices." },
+    { "type": "header", "content": "Countdown Timer" },
+    { "type": "text", "id": "end_date", "label": "End date & time", "info": "Format: YYYY-MM-DDTHH:MM:SS" },
+    { "type": "header", "content": "Button" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop Now" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "header", "content": "Background" },
+    { "type": "image_picker", "id": "image", "label": "Background image" },
+    { "type": "range", "id": "overlay_opacity", "label": "Overlay opacity", "min": 10, "max": 80, "step": 5, "default": 50, "unit": "%" },
+    { "type": "range", "id": "min_height", "label": "Minimum height", "min": 400, "max": 900, "step": 50, "default": 600, "unit": "px" }
+  ],
+  "presets": [{ "name": "Sale Banner" }]
+}
+{% endschema %}

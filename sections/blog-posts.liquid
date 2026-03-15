@@ -1,0 +1,245 @@
+{% comment %}
+  Blog Posts — 3-column article grid
+{% endcomment %}
+
+{%- liquid
+  assign blog = blogs[section.settings.blog]
+  assign count = section.settings.articles_to_show | default: 3
+-%}
+
+<style>
+  .blog-posts-{{ section.id }} {
+    padding: {{ section.settings.padding_top | default: 80 }}px 0 {{ section.settings.padding_bottom | default: 80 }}px;
+    background: #fff;
+  }
+  .blog-posts-{{ section.id }}__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .blog-posts-{{ section.id }}__eyebrow {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+    margin-bottom: 0.6rem;
+    display: block;
+  }
+  .blog-posts-{{ section.id }}__heading {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #1c1c1c;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .blog-posts-{{ section.id }}__view-all {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1c1c1c;
+    text-decoration: none;
+    border-bottom: 1px solid #1c1c1c;
+    padding-bottom: 2px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .blog-posts-{{ section.id }}__view-all:hover { opacity: 0.6; }
+  .blog-posts-{{ section.id }}__grid {
+    display: grid;
+    grid-template-columns: repeat({{ count | at_most: 3 }}, 1fr);
+    gap: 2rem;
+  }
+  .blog-posts-{{ section.id }}__card {
+    display: flex;
+    flex-direction: column;
+  }
+  .blog-posts-{{ section.id }}__img-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: #f0f0f0;
+    margin-bottom: 1.25rem;
+  }
+  .blog-posts-{{ section.id }}__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .blog-posts-{{ section.id }}__card:hover .blog-posts-{{ section.id }}__img { transform: scale(1.04); }
+  .blog-posts-{{ section.id }}__tag {
+    display: inline-block;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b6b6b;
+    margin-bottom: 0.6rem;
+    border: 1px solid #e8e8e8;
+    padding: 0.2rem 0.6rem;
+    width: fit-content;
+  }
+  .blog-posts-{{ section.id }}__date {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.75rem;
+    color: #9b9b9b;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  .blog-posts-{{ section.id }}__title {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: #1c1c1c;
+    margin: 0 0 0.75rem;
+    line-height: 1.4;
+  }
+  .blog-posts-{{ section.id }}__title a { text-decoration: none; color: inherit; transition: opacity 0.2s; }
+  .blog-posts-{{ section.id }}__title a:hover { opacity: 0.65; }
+  .blog-posts-{{ section.id }}__excerpt {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.875rem;
+    color: #6b6b6b;
+    line-height: 1.65;
+    margin: 0 0 1rem;
+    flex: 1;
+  }
+  .blog-posts-{{ section.id }}__read-more {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #1c1c1c;
+    text-decoration: none;
+    border-bottom: 1px solid #1c1c1c;
+    padding-bottom: 2px;
+    width: fit-content;
+    transition: opacity 0.2s;
+  }
+  .blog-posts-{{ section.id }}__read-more:hover { opacity: 0.6; }
+  @media (max-width: 899px) {
+    .blog-posts-{{ section.id }}__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 599px) {
+    .blog-posts-{{ section.id }}__grid { grid-template-columns: 1fr; }
+    .blog-posts-{{ section.id }}__header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+
+<section class="blog-posts-{{ section.id }}">
+  <div class="container">
+
+    <div class="blog-posts-{{ section.id }}__header">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="blog-posts-{{ section.id }}__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="blog-posts-{{ section.id }}__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.view_all_label != blank and blog != blank -%}
+        <a href="{{ blog.url }}" class="blog-posts-{{ section.id }}__view-all">
+          {{ section.settings.view_all_label }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if blog != blank and blog.articles.size > 0 -%}
+      <div class="blog-posts-{{ section.id }}__grid">
+        {%- for article in blog.articles limit: count -%}
+          <article class="blog-posts-{{ section.id }}__card">
+            <a href="{{ article.url }}" class="blog-posts-{{ section.id }}__img-wrap">
+              {%- if article.image != blank -%}
+                <img
+                  class="blog-posts-{{ section.id }}__img"
+                  src="{{ article.image | image_url: width: 800 }}"
+                  alt="{{ article.image.alt | default: article.title | escape }}"
+                  loading="lazy"
+                  width="800"
+                >
+              {%- else -%}
+                {{ 'image' | placeholder_svg_tag: 'blog-posts-' | append: section.id | append: '__img' }}
+              {%- endif -%}
+            </a>
+
+            {%- if section.settings.show_tags and article.tags.size > 0 -%}
+              <span class="blog-posts-{{ section.id }}__tag">{{ article.tags | first }}</span>
+            {%- endif -%}
+            {%- if section.settings.show_date -%}
+              <time class="blog-posts-{{ section.id }}__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </time>
+            {%- endif -%}
+
+            <h3 class="blog-posts-{{ section.id }}__title">
+              <a href="{{ article.url }}">{{ article.title }}</a>
+            </h3>
+
+            {%- if article.excerpt_or_content != blank -%}
+              <p class="blog-posts-{{ section.id }}__excerpt">
+                {{ article.excerpt_or_content | strip_html | truncate: 120 }}
+              </p>
+            {%- endif -%}
+
+            <a href="{{ article.url }}" class="blog-posts-{{ section.id }}__read-more">
+              {{ section.settings.read_more_label | default: 'Read more' }}
+            </a>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="blog-posts-{{ section.id }}__grid">
+        {%- for i in (1..3) -%}
+          <article class="blog-posts-{{ section.id }}__card">
+            <div class="blog-posts-{{ section.id }}__img-wrap">
+              {{ 'image' | placeholder_svg_tag: 'blog-posts-placeholder' }}
+            </div>
+            <span class="blog-posts-{{ section.id }}__tag">Product</span>
+            <time class="blog-posts-{{ section.id }}__date">January 01, 2026</time>
+            <h3 class="blog-posts-{{ section.id }}__title">
+              <a href="#">Sample Article Title {{ i }}</a>
+            </h3>
+            <p class="blog-posts-{{ section.id }}__excerpt">Add a blog in your theme settings to display real articles here.</p>
+            <a href="#" class="blog-posts-{{ section.id }}__read-more">Read more</a>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Blog Posts",
+  "tag": "section",
+  "class": "section-blog-posts",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "From the Blog" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Stories" },
+    { "type": "blog", "id": "blog", "label": "Blog" },
+    { "type": "range", "id": "articles_to_show", "label": "Articles to show", "min": 2, "max": 6, "step": 1, "default": 3 },
+    { "type": "checkbox", "id": "show_date", "label": "Show date", "default": true },
+    { "type": "checkbox", "id": "show_tags", "label": "Show tags", "default": true },
+    { "type": "text", "id": "view_all_label", "label": "View all label", "default": "Discover all our stories" },
+    { "type": "text", "id": "read_more_label", "label": "Read more label", "default": "Read more" },
+    { "type": "range", "id": "padding_top", "label": "Padding top", "min": 0, "max": 120, "step": 10, "default": 80, "unit": "px" },
+    { "type": "range", "id": "padding_bottom", "label": "Padding bottom", "min": 0, "max": 120, "step": 10, "default": 80, "unit": "px" }
+  ],
+  "presets": [{ "name": "Blog Posts" }]
+}
+{% endschema %}

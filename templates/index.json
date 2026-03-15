@@ -13,9 +13,24 @@
         "slide-1": {
           "type": "slide",
           "settings": {
+            "eyebrow": "New collection",
+            "heading": "Beauties",
+            "subheading": "Discover the collection redefining modern luxury.",
+            "button_label": "Shop Women",
+            "button_link": "/collections/women",
+            "button2_label": "Shop Men",
+            "button2_link": "/collections/men",
+            "content_position": "center",
+            "text_color": "white",
+            "overlay_opacity": 30
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
             "eyebrow": "New Season",
             "heading": "Le Sac Baguette",
-            "subheading": "Discover the collection redefining modern luxury.",
+            "subheading": "Timeless elegance for the modern wardrobe.",
             "button_label": "Shop Now",
             "button_link": "/collections/all",
             "content_position": "center",
@@ -23,13 +38,13 @@
             "overlay_opacity": 35
           }
         },
-        "slide-2": {
+        "slide-3": {
           "type": "slide",
           "settings": {
             "eyebrow": "New Arrivals",
             "heading": "Le Nova",
             "subheading": "Crafted from the finest materials for the discerning individual.",
-            "button_label": "Explore",
+            "button_label": "View Collection",
             "button_link": "/collections/all",
             "content_position": "center",
             "text_color": "white",
@@ -37,7 +52,7 @@
           }
         }
       },
-      "blocks_order": ["slide-1", "slide-2"]
+      "blocks_order": ["slide-1", "slide-2", "slide-3"]
     },
     "featured": {
       "type": "featured-collection",
@@ -53,44 +68,152 @@
         "view_all_label": "View All"
       }
     },
-    "collection-grid": {
-      "type": "collection-grid",
+    "content-over-media": {
+      "type": "content-over-media",
       "settings": {
-        "eyebrow": "Shop by Category",
-        "title": "Collections"
+        "eyebrow": "Our aim",
+        "heading": "Offer elegant, timeless & functional products",
+        "description": "We design our collections in Paris and have them manufactured by artisans in Naples. Our direct-to-consumer model allows us to offer premium quality without the traditional luxury markup.",
+        "link_1_label": "Our story",
+        "link_1_url": "/pages/about",
+        "link_2_label": "Our commitments",
+        "link_2_url": "/pages/commitments",
+        "overlay_opacity": 40,
+        "content_position": "left",
+        "min_height": 600
+      }
+    },
+    "marquee-1": {
+      "type": "marquee",
+      "settings": {
+        "background": "dark"
       },
       "blocks": {
-        "col-1": {
-          "type": "collection",
+        "item-1": { "type": "item", "settings": { "text": "New: Le Sac Baguette" } },
+        "item-2": { "type": "item", "settings": { "text": "New: Le Sac Tote" } },
+        "item-3": { "type": "item", "settings": { "text": "Shop New Arrivals" } }
+      },
+      "blocks_order": ["item-1", "item-2", "item-3"]
+    },
+    "new-arrivals": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "title": "Shop New Arrivals",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": true,
+        "view_all_label": "Shop All"
+      }
+    },
+    "marquee-2": {
+      "type": "marquee",
+      "settings": {
+        "background": "light"
+      },
+      "blocks": {
+        "item-1": { "type": "item", "settings": { "text": "New Arrivals" } },
+        "item-2": { "type": "item", "settings": { "text": "Shop New Arrivals" } },
+        "item-3": { "type": "item", "settings": { "text": "Free Shipping Over $150" } }
+      },
+      "blocks_order": ["item-1", "item-2", "item-3"]
+    },
+    "weekend-bags": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Le Weekend Bag",
+        "title": "Ideal for a weekend outing",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": false
+      }
+    },
+    "video": {
+      "type": "video",
+      "settings": {
+        "heading": "Made in Italy — Finest handmade",
+        "subtitle": "Each piece is crafted by master artisans in Naples, Italy.",
+        "overlay_opacity": 40,
+        "cta_label": "Shop",
+        "cta_link": "/collections/all"
+      }
+    },
+    "shop-the-look": {
+      "type": "shop-the-look",
+      "settings": {
+        "eyebrow": "Lookbook",
+        "heading": "Shop the Look"
+      },
+      "blocks": {
+        "look-1": { "type": "look", "settings": { "look_title": "The Weekend Look" } },
+        "look-2": { "type": "look", "settings": { "look_title": "The Office Look" } }
+      },
+      "blocks_order": ["look-1", "look-2"]
+    },
+    "sale-banner": {
+      "type": "sale-banner",
+      "settings": {
+        "eyebrow": "Limited time only",
+        "heading": "Super Sale — Up to 40% off",
+        "description": "Discover our exclusive selection of luxury handbags and backpacks at exceptional prices.",
+        "button_label": "Shop Now",
+        "button_link": "/collections/sale",
+        "overlay_opacity": 50,
+        "end_date": "2026-04-15T00:00:00"
+      }
+    },
+    "collaboration": {
+      "type": "collaboration",
+      "settings": {
+        "eyebrow": "Collaboration",
+        "heading": "Léo et Violette x Wendy Swan"
+      },
+      "blocks": {
+        "collab-1": {
+          "type": "item",
           "settings": {
-            "title": "Women",
-            "label": "New Season",
-            "link_text": "Shop Now",
-            "link": "/collections/women"
+            "eyebrow": "Collaboration",
+            "heading": "Léo et Violette x Wendy Swan — Dalia",
+            "link_label": "Discover",
+            "link_url": "/pages/collaboration"
           }
         },
-        "col-2": {
-          "type": "collection",
+        "collab-2": {
+          "type": "item",
           "settings": {
-            "title": "Men",
-            "label": "New Season",
-            "link_text": "Shop Now",
-            "link": "/collections/men"
+            "eyebrow": "New Collection",
+            "heading": "Léo et Violette x Wendy Swan — Nova",
+            "link_label": "Discover",
+            "link_url": "/pages/collaboration"
           }
         }
       },
-      "blocks_order": ["col-1", "col-2"]
+      "blocks_order": ["collab-1", "collab-2"]
+    },
+    "before-after": {
+      "type": "before-after",
+      "settings": {
+        "eyebrow": "Le Dalia",
+        "heading": "Choose your colour",
+        "left_label": "Almond green Liégé",
+        "left_link_label": "Shop this colour",
+        "left_link_url": "/collections/all",
+        "right_label": "Blue denim Liégé",
+        "right_link_label": "Shop this colour",
+        "right_link_url": "/collections/all"
+      }
     },
     "image-text": {
       "type": "image-with-text",
       "settings": {
-        "eyebrow": "The Craft",
-        "heading": "The Art of Luxury",
-        "text": "<p>Each piece is thoughtfully designed and crafted from the finest materials. Our commitment to quality means every detail is considered — from the initial sketch to the finished product in your hands.</p>",
+        "eyebrow": "The Design",
+        "heading": "Paris-based design, Naples craftsmanship",
+        "text": "<p>Our products are designed in Paris and manufactured by skilled artisans in Naples. This unique approach allows us to combine Parisian aesthetic with Italian craftsmanship.</p>",
         "show_divider": true,
-        "feature_1": "Ethically sourced materials",
-        "feature_2": "Hand-finished by master craftspeople",
-        "feature_3": "Free worldwide shipping & returns",
         "button_label": "Discover More",
         "button_link": "/pages/about",
         "button_style": "ghost",
@@ -101,139 +224,278 @@
         "padding_bottom": 80
       }
     },
+    "blog-posts": {
+      "type": "blog-posts",
+      "settings": {
+        "eyebrow": "From the Blog",
+        "heading": "Stories",
+        "articles_to_show": 3,
+        "show_date": true,
+        "show_tags": true,
+        "view_all_label": "Discover all our stories"
+      }
+    },
+    "product-of-week": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "Product of the week",
+        "title": "Le Continental Camel Liégé",
+        "products_to_show": 1,
+        "columns_desktop": 2,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": false
+      }
+    },
+    "materials": {
+      "type": "content-over-media",
+      "settings": {
+        "eyebrow": "Our craft",
+        "heading": "Materials",
+        "description": "We source only the finest materials — recovered hides from European tanneries, selected for their quality and durability.",
+        "link_1_label": "Our commitments",
+        "link_1_url": "/pages/commitments",
+        "overlay_opacity": 35,
+        "content_position": "center",
+        "min_height": 500
+      }
+    },
+    "press": {
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "As seen in",
+        "heading": "The Press"
+      },
+      "blocks": {
+        "quote-1": {
+          "type": "quote",
+          "settings": {
+            "publication_name": "GQ",
+            "quote_text": "A brand redefining modern luxury with an unwavering commitment to craft and sustainability.",
+            "publication_detail": "GQ Magazine"
+          }
+        },
+        "quote-2": {
+          "type": "quote",
+          "settings": {
+            "publication_name": "Farfetch",
+            "quote_text": "The quality is exceptional. These bags combine elegance with functionality in a way that few luxury brands manage.",
+            "publication_detail": "Farfetch Editorial"
+          }
+        },
+        "quote-3": {
+          "type": "quote",
+          "settings": {
+            "publication_name": "Forbes",
+            "quote_text": "Named one of the most innovative luxury brands — delivering quality without the traditional markup.",
+            "publication_detail": "Forbes"
+          }
+        }
+      },
+      "blocks_order": ["quote-1", "quote-2", "quote-3"]
+    },
     "brand-timeline": {
       "type": "brand-timeline",
       "settings": {
         "eyebrow": "Our History",
-        "heading": "A Legacy of Craft",
-        "subheading": "From a single workshop to a global brand — our journey."
+        "heading": "Le Petit Cartable",
+        "subheading": "From a single workshop to a global brand."
       },
       "blocks": {
         "year-1": {
           "type": "milestone",
           "settings": {
             "year": "2013",
-            "title": "Founded",
-            "description": "Our story begins with a single workshop and a commitment to craft."
+            "title": "First product — Le Petit Cartable",
+            "description": "Our story begins in Paris with the creation of our first iconic bag."
           }
         },
         "year-2": {
           "type": "milestone",
           "settings": {
-            "year": "2015",
-            "title": "First Collection",
-            "description": "The debut collection launches to critical acclaim, selling out within days."
+            "year": "2014",
+            "title": "Our vision — Transparency",
+            "description": "We commit to a direct-to-consumer model, cutting out all intermediaries."
           }
         },
         "year-3": {
           "type": "milestone",
           "settings": {
-            "year": "2017",
-            "title": "International Expansion",
-            "description": "We open our first flagship store in Paris and begin shipping worldwide."
+            "year": "2015",
+            "title": "New factory — Naples partnership",
+            "description": "We partner with a family-run atelier in Naples, home to Italy's finest leather craftsmen."
           }
         },
         "year-4": {
           "type": "milestone",
           "settings": {
-            "year": "2019",
-            "title": "Sustainability Pledge",
-            "description": "We commit to 100% ethically sourced materials across all collections."
+            "year": "2017",
+            "title": "Opening — Our Paris flagship",
+            "description": "We open our first flagship store on Rue du Faubourg Saint-Honoré."
           }
         },
         "year-5": {
           "type": "milestone",
           "settings": {
+            "year": "2020",
+            "title": "New idea — Small Leather Goods",
+            "description": "We expand with wallets, cardholders, and accessories."
+          }
+        },
+        "year-6": {
+          "type": "milestone",
+          "settings": {
             "year": "2021",
-            "title": "Award Winning",
-            "description": "Named one of the world's most innovative luxury brands by a leading industry journal."
+            "title": "First collaboration — Léo et Violette x Wendy Swan",
+            "description": "A limited edition of our iconic Dalia bag with artist Wendy Swan."
           }
         }
       },
-      "blocks_order": ["year-1", "year-2", "year-3", "year-4", "year-5"]
+      "blocks_order": ["year-1", "year-2", "year-3", "year-4", "year-5", "year-6"]
     },
-    "press": {
-      "type": "press",
+    "couple": {
+      "type": "couple",
       "settings": {
-        "eyebrow": "As Seen In"
+        "eyebrow": "The couple",
+        "heading": "Léo et Violette",
+        "text": "We founded this brand with a single vision: to offer luxury leather goods directly to our customers, without intermediaries, without compromises on quality.",
+        "overlay_opacity": 45,
+        "content_position": "center",
+        "button_label": "Our Story",
+        "button_link": "/pages/about",
+        "min_height": 600
+      }
+    },
+    "collection-grid": {
+      "type": "collection-grid",
+      "settings": {
+        "eyebrow": "From A to Z",
+        "title": "Everything we make"
       },
       "blocks": {
-        "logo-1": { "type": "logo", "settings": { "name": "Vogue" } },
-        "logo-2": { "type": "logo", "settings": { "name": "Harper's Bazaar" } },
-        "logo-3": { "type": "logo", "settings": { "name": "Elle" } },
-        "logo-4": { "type": "logo", "settings": { "name": "WWD" } },
-        "logo-5": { "type": "logo", "settings": { "name": "Forbes" } },
-        "quote-1": {
-          "type": "quote",
+        "col-1": {
+          "type": "collection",
           "settings": {
-            "quote": "A brand redefining modern luxury with an unwavering commitment to craft and sustainability.",
-            "source": "Vogue Magazine"
+            "title": "The Design",
+            "label": "Paris-based product development",
+            "link_text": "Learn More",
+            "link": "/pages/design"
+          }
+        },
+        "col-2": {
+          "type": "collection",
+          "settings": {
+            "title": "Materials",
+            "label": "Sourced from European tanneries",
+            "link_text": "Learn More",
+            "link": "/pages/materials"
+          }
+        },
+        "col-3": {
+          "type": "collection",
+          "settings": {
+            "title": "The Know-How",
+            "label": "Artisanal manufacturing standards",
+            "link_text": "Learn More",
+            "link": "/pages/craftsmanship"
           }
         }
       },
-      "blocks_order": ["logo-1", "logo-2", "logo-3", "logo-4", "logo-5", "quote-1"]
-    },
-    "testimonials": {
-      "type": "testimonials",
-      "settings": {
-        "eyebrow": "What Our Customers Say",
-        "heading": "Loved by Thousands"
-      },
-      "blocks": {
-        "testimonial-1": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "The quality is exceptional. I've never owned anything quite like it — the craftsmanship speaks for itself. Truly a luxury experience from purchase to delivery.",
-            "author": "Sophia L.",
-            "author_title": "Verified Customer",
-            "rating": 5
-          }
-        },
-        "testimonial-2": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "From the moment it arrived, I knew this was something special. The packaging alone told me everything about the brand's values.",
-            "author": "Marcus T.",
-            "author_title": "Verified Customer",
-            "rating": 5
-          }
-        },
-        "testimonial-3": {
-          "type": "testimonial",
-          "settings": {
-            "quote": "I've been searching for this level of quality for years. The attention to detail is extraordinary. This is my fifth purchase and each one has been perfect.",
-            "author": "Isabelle R.",
-            "author_title": "Loyal Customer",
-            "rating": 5
-          }
-        }
-      },
-      "blocks_order": ["testimonial-1", "testimonial-2", "testimonial-3"]
+      "blocks_order": ["col-1", "col-2", "col-3"]
     },
     "newsletter": {
       "type": "newsletter",
       "settings": {
-        "eyebrow": "Join the Family",
-        "heading": "Be the First to Know",
-        "subheading": "Subscribe for exclusive access to new arrivals, private sales, and editorial stories.",
-        "email_placeholder": "Enter your email address",
+        "eyebrow": "Newsletter",
+        "heading": "Keep me updated",
+        "subheading": "Subscribe to get notified about product launches, special offers and company news.",
+        "email_placeholder": "Your email address",
         "button_label": "Subscribe",
-        "disclaimer": "By subscribing, you agree to receive marketing emails. Unsubscribe anytime.",
-        "show_trust_badges": true,
         "background_color": "dark",
         "padding_top": 96,
         "padding_bottom": 96
       }
+    },
+    "instagram": {
+      "type": "instagram",
+      "settings": {
+        "eyebrow": "Instagram",
+        "heading": "@leoetviolette",
+        "instagram_handle": "@leoetviolette",
+        "view_label": "Follow on Instagram"
+      },
+      "blocks": {
+        "img-1": { "type": "image", "settings": { "link": "https://www.instagram.com" } },
+        "img-2": { "type": "image", "settings": { "link": "https://www.instagram.com" } },
+        "img-3": { "type": "image", "settings": { "link": "https://www.instagram.com" } },
+        "img-4": { "type": "image", "settings": { "link": "https://www.instagram.com" } },
+        "img-5": { "type": "image", "settings": { "link": "https://www.instagram.com" } }
+      },
+      "blocks_order": ["img-1", "img-2", "img-3", "img-4", "img-5"]
+    },
+    "trust-badges": {
+      "type": "trust-badges",
+      "settings": {},
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "delivery",
+            "heading": "Express delivery",
+            "description": "DHL express delivery worldwide"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "returns",
+            "heading": "Free returns",
+            "description": "Free returns for 30 days for any order"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "support",
+            "heading": "Customer service",
+            "description": "Available via WhatsApp and email"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "payment",
+            "heading": "Pay in 3x",
+            "description": "Interest-free from $100 of purchase"
+          }
+        }
+      },
+      "blocks_order": ["badge-1", "badge-2", "badge-3", "badge-4"]
     }
   },
   "order": [
     "slideshow",
     "featured",
-    "collection-grid",
+    "content-over-media",
+    "marquee-1",
+    "new-arrivals",
+    "marquee-2",
+    "weekend-bags",
+    "video",
+    "shop-the-look",
+    "sale-banner",
+    "collaboration",
+    "before-after",
     "image-text",
-    "brand-timeline",
+    "blog-posts",
+    "product-of-week",
+    "materials",
     "press",
-    "testimonials",
-    "newsletter"
+    "brand-timeline",
+    "couple",
+    "collection-grid",
+    "newsletter",
+    "instagram",
+    "trust-badges"
   ]
 }
