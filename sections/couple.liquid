@@ -94,7 +94,9 @@
 
 <div class="couple-{{ section.id }}">
   {%- if section.settings.image != blank -%}
-    {{ section.settings.image | image_url: width: 1920 | image_tag: class: 'couple-' | append: section.id | append: '__bg', loading: 'lazy', alt: section.settings.image.alt | default: section.settings.heading | escape }}
+    {%- assign couple_img_class = 'couple-' | append: section.id | append: '__bg' -%}
+    {%- assign couple_img_alt = section.settings.image.alt | default: section.settings.heading | escape -%}
+    {{ section.settings.image | image_url: width: 1920 | image_tag: class: couple_img_class, loading: 'lazy', alt: couple_img_alt }}
   {%- else -%}
     <div style="position:absolute;inset:0;background:linear-gradient(135deg,#142e2b,#1c1c1c);"></div>
   {%- endif -%}

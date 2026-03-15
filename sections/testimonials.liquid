@@ -188,6 +188,8 @@
               src="{{ block.settings.logo | image_url: height: 32 }}"
               alt="{{ block.settings.publication_name | escape }}"
               loading="lazy"
+              width="120"
+              height="32"
             >
           {%- else -%}
             {{ block.settings.publication_name | default: 'Press' }}

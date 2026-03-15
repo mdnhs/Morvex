@@ -170,9 +170,11 @@
                   alt="{{ article.image.alt | default: article.title | escape }}"
                   loading="lazy"
                   width="800"
+                  height="600"
                 >
               {%- else -%}
-                {{ 'image' | placeholder_svg_tag: 'blog-posts-' | append: section.id | append: '__img' }}
+                {%- assign blog_placeholder_class = 'blog-posts-' | append: section.id | append: '__img' -%}
+                {{ 'image' | placeholder_svg_tag: blog_placeholder_class }}
               {%- endif -%}
             </a>
 

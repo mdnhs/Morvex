@@ -87,13 +87,22 @@
 <body class="template-{{ template.name | handle }}{% if template.suffix != blank %} template-{{ template.name | handle }}--{{ template.suffix | handle }}{% endif %}">
 
   <!-- Skip to content link for accessibility -->
-  <a class="visually-hidden" href="#MainContent" style="
-    position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
-    &:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:1rem 1.5rem;
-    background:#c9a96e;color:#fff;font-size:1rem;z-index:9999;left:-9999px;}
-  ">
+  <a class="visually-hidden skip-to-content" href="#MainContent">
     Skip to content
   </a>
+  <style>
+    .skip-to-content {
+      position: absolute; left: -9999px; top: auto;
+      width: 1px; height: 1px; overflow: hidden;
+    }
+    .skip-to-content:focus {
+      position: fixed; top: 0; left: 0;
+      width: auto; height: auto;
+      padding: 1rem 1.5rem;
+      background: #c9a96e; color: #fff;
+      font-size: 1rem; z-index: 9999;
+    }
+  </style>
 
   {%- if settings.show_announcement_bar and settings.announcement_text != blank -%}
     <div class="announcement-bar" role="complementary">

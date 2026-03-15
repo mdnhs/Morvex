@@ -159,7 +159,7 @@
   >
     <div class="ba-{{ section.id }}__left">
       {%- if section.settings.image_left != blank -%}
-        <img src="{{ section.settings.image_left | image_url: width: 1400 }}" alt="{{ section.settings.left_label | escape }}" loading="lazy">
+        <img src="{{ section.settings.image_left | image_url: width: 1400 }}" alt="{{ section.settings.left_label | escape }}" loading="lazy" width="1400" height="700">
       {%- else -%}
         <div style="width:100%;height:100%;background:linear-gradient(135deg,#a8c5b0,#7a9e85);"></div>
       {%- endif -%}
@@ -167,7 +167,7 @@
 
     <div class="ba-{{ section.id }}__right" id="ba-right-{{ section.id }}">
       {%- if section.settings.image_right != blank -%}
-        <img src="{{ section.settings.image_right | image_url: width: 1400 }}" alt="{{ section.settings.right_label | escape }}" loading="lazy">
+        <img src="{{ section.settings.image_right | image_url: width: 1400 }}" alt="{{ section.settings.right_label | escape }}" loading="lazy" width="1400" height="700">
       {%- else -%}
         <div style="width:100%;height:100%;background:linear-gradient(135deg,#6b8cba,#4a6d9e);"></div>
       {%- endif -%}

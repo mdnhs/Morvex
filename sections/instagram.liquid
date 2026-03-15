@@ -121,7 +121,8 @@
         {{ block.shopify_attributes }}
       >
         {%- if block.settings.image != blank -%}
-          {{ block.settings.image | image_url: width: 600 | image_tag: class: 'insta-' | append: section.id | append: '__img', loading: 'lazy', alt: 'Instagram post' }}
+          {%- assign insta_img_class = 'insta-' | append: section.id | append: '__img' -%}
+          {{ block.settings.image | image_url: width: 600 | image_tag: class: insta_img_class, loading: 'lazy', alt: 'Instagram post' }}
         {%- else -%}
           <div style="width:100%;height:100%;background:#e8e8e8;display:flex;align-items:center;justify-content:center;">
             {{ 'image' | placeholder_svg_tag: '' }}
