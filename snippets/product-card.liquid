@@ -1,0 +1,180 @@
+{% comment %}
+  Renders a product card.
+
+  Usage:
+    {% render 'product-card', product: product %}
+    {% render 'product-card', product: product, show_vendor: true, show_quick_add: false %}
+
+  Accepts:
+  - product: {Object} The product object (required)
+  - show_vendor: {Boolean} Show the vendor name (default: false)
+  - show_quick_add: {Boolean} Show the quick-add button on hover (default: true)
+  - lazy_load: {Boolean} Lazy load the product image (default: true)
+  - index: {Number} Card index for animation delay
+{% endcomment %}
+
+{%- liquid
+  assign show_vendor = show_vendor | default: false
+  assign show_quick_add = show_quick_add | default: true
+  assign lazy = lazy_load | default: true
+  assign loading_attr = 'lazy'
+  unless lazy
+    assign loading_attr = 'eager'
+  endunless
+
+  assign first_variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+
+  assign sold_out = true
+  if product.available
+    assign sold_out = false
+  endif
+
+  assign has_secondary_image = false
+  if product.media.size > 1
+    assign has_secondary_image = true
+  endif
+-%}
+
+<div class="product-card{% if sold_out %} product-card--sold-out{% endif %}" data-product-id="{{ product.id }}">
+
+  <!-- Product Media -->
+  <a
+    href="{{ product.url | within: collection }}"
+    class="product-card__media"
+    aria-label="{{ product.title | escape }}"
+    tabindex="0"
+  >
+    {%- if product.featured_media -%}
+      <img
+        class="product-card__image product-card__image--primary"
+        src="{{ product.featured_media | image_url: width: 600 }}"
+        alt="{{ product.featured_media.alt | default: product.title | escape }}"
+        width="{{ product.featured_media.width }}"
+        height="{{ product.featured_media.height }}"
+        loading="{{ loading_attr }}"
+      >
+
+      {%- if has_secondary_image -%}
+        <img
+          class="product-card__image product-card__image--secondary"
+          src="{{ product.media[1] | image_url: width: 600 }}"
+          alt="{{ product.media[1].alt | default: product.title | escape }}"
+          width="{{ product.media[1].width }}"
+          height="{{ product.media[1].height }}"
+          loading="lazy"
+        >
+      {%- endif -%}
+    {%- else -%}
+      <div class="product-card__media--placeholder">
+        {{ 'product-1' | placeholder_svg_tag: 'placeholder-icon' }}
+      </div>
+    {%- endif -%}
+
+    <!-- Badges -->
+    <div class="product-card__badges">
+      {%- if sold_out -%}
+        <span class="product-card__badge product-card__badge--sold-out">
+          {{ 'products.product.sold_out' | t }}
+        </span>
+      {%- elsif on_sale -%}
+        {%- assign discount_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+        <span class="product-card__badge">
+          &minus;{{ discount_percent }}%
+        </span>
+      {%- endif -%}
+      {%- if product.tags contains 'new' or product.tags contains 'New' -%}
+        <span class="product-card__badge product-card__badge--new">New</span>
+      {%- endif -%}
+      {%- if product.tags contains 'best-seller' or product.tags contains 'Best Seller' or product.tags contains 'bestseller' -%}
+        <span class="product-card__badge product-card__badge--bestseller">Best Seller</span>
+      {%- endif -%}
+    </div>
+
+    <!-- Wishlist button (decorative) -->
+    <button
+      class="product-card__wishlist"
+      type="button"
+      aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Add to wishlist' }}"
+      data-product-handle="{{ product.handle }}"
+    >
+      {%- render 'icon', icon: 'heart', size: 16 -%}
+    </button>
+
+    <!-- Quick Add (hover) -->
+    {%- if show_quick_add and product.available -%}
+      <div class="product-card__quick-add">
+        {%- if product.variants.size == 1 -%}
+          <form action="{{ routes.cart_add_url }}" method="post">
+            <input type="hidden" name="id" value="{{ first_variant.id }}">
+            <input type="hidden" name="quantity" value="1">
+            <button
+              type="submit"
+              class="btn btn--secondary btn--sm"
+              data-original-text="{{ 'products.product.quick_add' | t | default: 'Quick Add' }}"
+            >
+              {{ 'products.product.quick_add' | t | default: 'Quick Add' }}
+            </button>
+          </form>
+        {%- else -%}
+          <a href="{{ product.url }}" class="btn btn--secondary btn--sm">
+            {{ 'products.product.choose_options' | t | default: 'Choose Options' }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </a>
+
+  <!-- Product Info -->
+  <div class="product-card__info">
+    {%- if show_vendor and product.vendor != blank -%}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+
+    <a href="{{ product.url | within: collection }}" class="product-card__title">
+      {{ product.title }}
+    </a>
+
+    <!-- Price -->
+    <div class="product-card__price">
+      {%- if on_sale -%}
+        <span class="product-card__price-sale">
+          {{ product.price | money }}
+        </span>
+        <span class="product-card__price-compare">
+          {{ product.compare_at_price | money }}
+        </span>
+      {%- else -%}
+        <span class="product-card__price-regular">
+          {%- if product.price_varies -%}
+            {{ 'products.product.from_price_html' | t: price: product.price_min | money | default: product.price_min | money }}
+          {%- else -%}
+            {{ product.price | money }}
+          {%- endif -%}
+        </span>
+      {%- endif -%}
+    </div>
+
+    <!-- Color swatches (from product options) -->
+    {%- for option in product.options_with_values -%}
+      {%- if option.name == 'Color' or option.name == 'Colour' -%}
+        <div class="product-card__swatches">
+          {%- for value in option.values -%}
+            {%- assign swatch_color = value | handleize -%}
+            <div
+              class="product-card__swatch"
+              style="background-color: {{ swatch_color }};"
+              title="{{ value | escape }}"
+              aria-label="{{ value | escape }}"
+            ></div>
+          {%- endfor -%}
+        </div>
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+</div>

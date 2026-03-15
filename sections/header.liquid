@@ -1,0 +1,334 @@
+{% comment %}
+  Header section — sticky navigation with logo, nav links, and action icons.
+  Supports transparent overlay on hero sections.
+{% endcomment %}
+
+{%- liquid
+  assign is_transparent = section.settings.transparent_header
+  assign sticky = section.settings.sticky_header
+  assign menu = section.settings.menu
+  assign logo_width = section.settings.logo_width
+-%}
+
+<header
+  class="site-header{% if is_transparent %} header--transparent{% else %} header--solid{% endif %}"
+  id="site-header"
+  data-transparent="{{ is_transparent }}"
+  data-sticky="{{ sticky }}"
+  role="banner"
+>
+  <div class="header__inner">
+
+    <!-- Left Navigation -->
+    <nav class="header__nav" role="navigation" aria-label="{{ 'header.navigation' | t | default: 'Main navigation' }}">
+      <ul class="header__nav-list" role="list">
+        {%- for link in linklists[menu].links -%}
+          {%- if link.links != blank -%}
+            <li class="header__nav-item" role="listitem">
+              <a
+                href="{{ link.url }}"
+                class="header__nav-link"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {{ link.title }}
+                {%- render 'icon', icon: 'chevron-down', size: 14 -%}
+              </a>
+              <div class="header__dropdown" aria-label="{{ link.title | escape }}">
+                <ul class="header__dropdown-list" role="list">
+                  {%- for child_link in link.links -%}
+                    <li role="listitem">
+                      <a
+                        href="{{ child_link.url }}"
+                        class="header__dropdown-link{% if child_link.active %} active{% endif %}"
+                      >
+                        {{ child_link.title }}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </li>
+          {%- else -%}
+            <li class="header__nav-item" role="listitem">
+              <a
+                href="{{ link.url }}"
+                class="header__nav-link{% if link.active %} active{% endif %}"
+              >
+                {{ link.title }}
+              </a>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <!-- Logo -->
+    <div class="header__logo">
+      <a href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if section.settings.logo != blank -%}
+          <img
+            class="header__logo-img"
+            src="{{ section.settings.logo | image_url: width: logo_width }}"
+            alt="{{ shop.name | escape }}"
+            width="{{ logo_width }}"
+            height="{{ logo_width | divided_by: section.settings.logo.aspect_ratio | round }}"
+            loading="eager"
+          >
+        {%- else -%}
+          <span class="header__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <!-- Action Icons -->
+    <div class="header__actions">
+
+      <!-- Search -->
+      {%- if section.settings.show_search -%}
+        <a
+          href="{{ routes.search_url }}"
+          class="header__action-btn"
+          aria-label="{{ 'general.search.title' | t | default: 'Search' }}"
+        >
+          {%- render 'icon', icon: 'search', size: 20 -%}
+        </a>
+      {%- endif -%}
+
+      <!-- Account -->
+      {%- if section.settings.show_account -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <a
+            href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+            class="header__action-btn"
+            aria-label="{%- if customer -%}{{ 'header.account' | t | default: 'Account' }}{%- else -%}{{ 'header.login' | t | default: 'Log in' }}{%- endif -%}"
+          >
+            {%- render 'icon', icon: 'account', size: 20 -%}
+          </a>
+        {%- endif -%}
+      {%- endif -%}
+
+      <!-- Cart Icon -->
+      {%- if section.settings.show_cart_icon -%}
+        <button
+          type="button"
+          class="header__action-btn"
+          data-cart-open
+          aria-label="{{ 'general.cart.title' | t }} ({{ cart.item_count }} {{ 'general.cart.items' | t | default: 'items' }})"
+        >
+          {%- render 'icon', icon: 'cart', size: 20 -%}
+          <span
+            class="header__cart-count{% if cart.item_count == 0 %} hidden{% endif %}"
+            aria-hidden="true"
+          >
+            {{ cart.item_count }}
+          </span>
+        </button>
+      {%- endif -%}
+
+      <!-- Locale Selector -->
+      {%- if section.settings.show_locale_selector and localization.available_countries.size > 1 -%}
+        <div class="locale-selector" id="locale-selector-{{ section.id }}">
+          <button
+            type="button"
+            class="locale-selector__btn"
+            aria-expanded="false"
+            aria-controls="locale-dropdown-{{ section.id }}"
+          >
+            {{ localization.country.iso_code }}
+            {%- render 'icon', icon: 'chevron-down', size: 12 -%}
+          </button>
+          <div class="locale-selector__dropdown" id="locale-dropdown-{{ section.id }}" role="listbox">
+            {%- form 'localization', id: 'localization-form-header' -%}
+              {%- for country in localization.available_countries -%}
+                <a
+                  href="#"
+                  class="locale-selector__option{% if country.iso_code == localization.country.iso_code %} is-active{% endif %}"
+                  role="option"
+                  aria-selected="{{ country.iso_code == localization.country.iso_code }}"
+                  data-value="{{ country.iso_code }}"
+                  onclick="this.closest('form').querySelector('[name=country_code]').value='{{ country.iso_code }}';this.closest('form').submit();return false;"
+                >
+                  {{ country.name }} ({{ country.currency.iso_code }})
+                </a>
+              {%- endfor -%}
+              <input type="hidden" name="country_code" value="{{ localization.country.iso_code }}">
+            {%- endform -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <!-- Mobile Menu Toggle -->
+      <button
+        class="header__menu-toggle"
+        type="button"
+        aria-label="{{ 'header.menu' | t | default: 'Menu' }}"
+        aria-expanded="false"
+        aria-controls="mobile-navigation"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Navigation Drawer -->
+<nav
+  id="mobile-navigation"
+  class="mobile-nav"
+  role="navigation"
+  aria-label="{{ 'header.mobile_navigation' | t | default: 'Mobile navigation' }}"
+>
+  <ul class="mobile-nav__list" role="list">
+    {%- for link in linklists[menu].links -%}
+      <li class="mobile-nav__item" role="listitem">
+        {%- if link.links != blank -%}
+          <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--color-border);">
+            <a href="{{ link.url }}" class="mobile-nav__link" style="border-bottom:none;">{{ link.title }}</a>
+            <button
+              class="mobile-nav__sub-toggle"
+              type="button"
+              aria-expanded="false"
+              style="padding:1rem;color:var(--color-text);background:none;border:none;cursor:pointer;"
+              aria-label="Expand {{ link.title | escape }}"
+            >
+              {%- render 'icon', icon: 'chevron-down', size: 18 -%}
+            </button>
+          </div>
+          <div class="mobile-nav__sub" style="max-height:0;overflow:hidden;transition:max-height 0.3s ease;">
+            {%- for child_link in link.links -%}
+              <a href="{{ child_link.url }}" class="mobile-nav__sub-link">{{ child_link.title }}</a>
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <!-- Mobile nav footer -->
+  <div style="padding-top:2rem;border-top:1px solid var(--color-border);margin-top:1rem;">
+    {%- if shop.customer_accounts_enabled -%}
+      <a
+        href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
+        style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;padding:0.75rem 0;color:var(--color-text-light);"
+      >
+        {%- render 'icon', icon: 'account', size: 18 -%}
+        {%- if customer -%}{{ 'header.account' | t | default: 'My Account' }}{%- else -%}{{ 'header.login' | t | default: 'Log In' }}{%- endif -%}
+      </a>
+    {%- endif -%}
+    <a
+      href="{{ routes.search_url }}"
+      style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;padding:0.75rem 0;color:var(--color-text-light);"
+    >
+      {%- render 'icon', icon: 'search', size: 18 -%}
+      {{ 'general.search.title' | t | default: 'Search' }}
+    </a>
+  </div>
+</nav>
+
+<!-- Spacer so content isn't hidden behind fixed header -->
+{%- unless is_transparent -%}
+  <div class="header-spacer" aria-hidden="true"></div>
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "default": 140,
+      "unit": "px",
+      "label": "Logo width"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Main menu"
+    },
+    {
+      "type": "header",
+      "content": "Header behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_header",
+      "default": true,
+      "label": "Sticky header"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_header",
+      "default": false,
+      "label": "Transparent header on first section",
+      "info": "Header will be transparent when hero is set to full-width at the top of the page."
+    },
+    {
+      "type": "header",
+      "content": "Icons"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cart_icon",
+      "default": true,
+      "label": "Show cart icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_account",
+      "default": true,
+      "label": "Show account icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "default": false,
+      "label": "Show country/currency selector"
+    }
+  ]
+}
+{% endschema %}
+
+<script>
+(function(){
+  var ls = document.getElementById('locale-selector-{{ section.id }}');
+  if (!ls) return;
+  var btn = ls.querySelector('.locale-selector__btn');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = ls.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function(){ ls.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); });
+})();
+</script>

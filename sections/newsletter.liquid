@@ -1,0 +1,208 @@
+{% comment %}
+  Newsletter section — full-width signup form with configurable background.
+{% endcomment %}
+
+{%- liquid
+  assign bg_class = 'newsletter--dark'
+  case section.settings.background_color
+    when 'light'
+      assign bg_class = 'newsletter--light'
+    when 'accent'
+      assign bg_class = 'newsletter--accent'
+  endcase
+-%}
+
+<section
+  class="newsletter {{ bg_class }}"
+  id="section-newsletter-{{ section.id }}"
+  style="padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  aria-label="{{ section.settings.heading | default: 'Newsletter signup' | escape }}"
+>
+  <div class="container">
+    <div class="container--narrow">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="newsletter__eyebrow fade-in">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="newsletter__title fade-in fade-in--delay-1">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="newsletter__subtitle fade-in fade-in--delay-2">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+
+      {%- form 'customer', id: "newsletter-section-form-{{ section.id }}", class: 'fade-in fade-in--delay-3' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {%- if form.posted_successfully? -%}
+          <p style="
+            font-family: var(--font-heading);
+            font-size: var(--text-2xl);
+            font-weight: var(--weight-light);
+            color: {% if section.settings.background_color == 'dark' %}#ffffff{% elsif section.settings.background_color == 'accent' %}#ffffff{% else %}var(--color-text){% endif %};
+            text-align: center;
+            padding: var(--space-6) 0;
+          ">
+            {{ 'newsletter.success' | t | default: 'Thank you — you\'ve been subscribed!' }}
+          </p>
+        {%- elsif form.errors -%}
+          <div style="color:#ff6b6b;text-align:center;margin-bottom:var(--space-4);font-size:var(--text-sm);">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- else -%}
+          <div class="newsletter__form">
+            <label for="newsletter-email-{{ section.id }}" class="visually-hidden">
+              {{ 'newsletter.email_label' | t | default: 'Email address' }}
+            </label>
+            <input
+              type="email"
+              class="newsletter__input"
+              name="contact[email]"
+              id="newsletter-email-{{ section.id }}"
+              placeholder="{{ section.settings.email_placeholder | default: 'Your email address' }}"
+              required
+              autocomplete="email"
+              spellcheck="false"
+            >
+            <button type="submit" class="newsletter__submit">
+              {{ section.settings.button_label | default: 'Subscribe' }}
+            </button>
+          </div>
+        {%- endif -%}
+
+      {%- endform -%}
+
+      {%- if section.settings.disclaimer != blank -%}
+        <p class="newsletter__disclaimer fade-in fade-in--delay-4">{{ section.settings.disclaimer }}</p>
+      {%- endif -%}
+
+      <!-- Trust badges row -->
+      {%- if section.settings.show_trust_badges -%}
+        <div style="
+          display:flex;
+          justify-content:center;
+          gap:var(--space-10);
+          margin-top:var(--space-10);
+          flex-wrap:wrap;
+          opacity:0.7;
+        ">
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);letter-spacing:0.08em;">
+            {%- render 'icon', icon: 'lock', size: 16 -%}
+            No spam, ever
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);letter-spacing:0.08em;">
+            {%- render 'icon', icon: 'check', size: 16 -%}
+            Unsubscribe anytime
+          </div>
+          <div style="display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);letter-spacing:0.08em;">
+            {%- render 'icon', icon: 'heart', size: 16 -%}
+            Members-only offers
+          </div>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section-newsletter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Join the Prestige Family"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Be the First to Know"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Subscribe for exclusive access to new arrivals, private sales, and editorial stories."
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "default": "Enter your email address",
+      "label": "Email input placeholder"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "default": "Subscribe",
+      "label": "Button label"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer text",
+      "default": "By subscribing, you agree to receive marketing emails. Unsubscribe anytime."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_trust_badges",
+      "default": true,
+      "label": "Show trust badges"
+    },
+    {
+      "type": "header",
+      "content": "Appearance"
+    },
+    {
+      "type": "select",
+      "id": "background_color",
+      "label": "Background",
+      "options": [
+        { "value": "dark", "label": "Dark (near-black)" },
+        { "value": "light", "label": "Light (warm white)" },
+        { "value": "accent", "label": "Accent (gold)" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "default": 96,
+      "unit": "px",
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 40,
+      "max": 160,
+      "step": 8,
+      "default": 96,
+      "unit": "px",
+      "label": "Bottom padding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "settings": {
+        "heading": "Be the First to Know",
+        "background_color": "dark"
+      }
+    }
+  ]
+}
+{% endschema %}

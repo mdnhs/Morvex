@@ -1,0 +1,239 @@
+{
+  "sections": {
+    "slideshow": {
+      "type": "slideshow",
+      "settings": {
+        "height": "full",
+        "show_arrows": true,
+        "show_dots": true,
+        "autoplay": true,
+        "autoplay_speed": 5
+      },
+      "blocks": {
+        "slide-1": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Season",
+            "heading": "Le Sac Baguette",
+            "subheading": "Discover the collection redefining modern luxury.",
+            "button_label": "Shop Now",
+            "button_link": "/collections/all",
+            "content_position": "center",
+            "text_color": "white",
+            "overlay_opacity": 35
+          }
+        },
+        "slide-2": {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Arrivals",
+            "heading": "Le Nova",
+            "subheading": "Crafted from the finest materials for the discerning individual.",
+            "button_label": "Explore",
+            "button_link": "/collections/all",
+            "content_position": "center",
+            "text_color": "white",
+            "overlay_opacity": 35
+          }
+        }
+      },
+      "blocks_order": ["slide-1", "slide-2"]
+    },
+    "featured": {
+      "type": "featured-collection",
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "title": "Best Sellers",
+        "subtitle": "Handpicked pieces from our latest collection.",
+        "products_to_show": 8,
+        "columns_desktop": 4,
+        "show_vendor": false,
+        "show_quick_add": true,
+        "show_view_all": true,
+        "view_all_label": "View All"
+      }
+    },
+    "collection-grid": {
+      "type": "collection-grid",
+      "settings": {
+        "eyebrow": "Shop by Category",
+        "title": "Collections"
+      },
+      "blocks": {
+        "col-1": {
+          "type": "collection",
+          "settings": {
+            "title": "Women",
+            "label": "New Season",
+            "link_text": "Shop Now",
+            "link": "/collections/women"
+          }
+        },
+        "col-2": {
+          "type": "collection",
+          "settings": {
+            "title": "Men",
+            "label": "New Season",
+            "link_text": "Shop Now",
+            "link": "/collections/men"
+          }
+        }
+      },
+      "blocks_order": ["col-1", "col-2"]
+    },
+    "image-text": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "The Craft",
+        "heading": "The Art of Luxury",
+        "text": "<p>Each piece is thoughtfully designed and crafted from the finest materials. Our commitment to quality means every detail is considered — from the initial sketch to the finished product in your hands.</p>",
+        "show_divider": true,
+        "feature_1": "Ethically sourced materials",
+        "feature_2": "Hand-finished by master craftspeople",
+        "feature_3": "Free worldwide shipping & returns",
+        "button_label": "Discover More",
+        "button_link": "/pages/about",
+        "button_style": "ghost",
+        "layout": "image_first",
+        "image_width": "50",
+        "background_color": "#ffffff",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "brand-timeline": {
+      "type": "brand-timeline",
+      "settings": {
+        "eyebrow": "Our History",
+        "heading": "A Legacy of Craft",
+        "subheading": "From a single workshop to a global brand — our journey."
+      },
+      "blocks": {
+        "year-1": {
+          "type": "milestone",
+          "settings": {
+            "year": "2013",
+            "title": "Founded",
+            "description": "Our story begins with a single workshop and a commitment to craft."
+          }
+        },
+        "year-2": {
+          "type": "milestone",
+          "settings": {
+            "year": "2015",
+            "title": "First Collection",
+            "description": "The debut collection launches to critical acclaim, selling out within days."
+          }
+        },
+        "year-3": {
+          "type": "milestone",
+          "settings": {
+            "year": "2017",
+            "title": "International Expansion",
+            "description": "We open our first flagship store in Paris and begin shipping worldwide."
+          }
+        },
+        "year-4": {
+          "type": "milestone",
+          "settings": {
+            "year": "2019",
+            "title": "Sustainability Pledge",
+            "description": "We commit to 100% ethically sourced materials across all collections."
+          }
+        },
+        "year-5": {
+          "type": "milestone",
+          "settings": {
+            "year": "2021",
+            "title": "Award Winning",
+            "description": "Named one of the world's most innovative luxury brands by a leading industry journal."
+          }
+        }
+      },
+      "blocks_order": ["year-1", "year-2", "year-3", "year-4", "year-5"]
+    },
+    "press": {
+      "type": "press",
+      "settings": {
+        "eyebrow": "As Seen In"
+      },
+      "blocks": {
+        "logo-1": { "type": "logo", "settings": { "name": "Vogue" } },
+        "logo-2": { "type": "logo", "settings": { "name": "Harper's Bazaar" } },
+        "logo-3": { "type": "logo", "settings": { "name": "Elle" } },
+        "logo-4": { "type": "logo", "settings": { "name": "WWD" } },
+        "logo-5": { "type": "logo", "settings": { "name": "Forbes" } },
+        "quote-1": {
+          "type": "quote",
+          "settings": {
+            "quote": "A brand redefining modern luxury with an unwavering commitment to craft and sustainability.",
+            "source": "Vogue Magazine"
+          }
+        }
+      },
+      "blocks_order": ["logo-1", "logo-2", "logo-3", "logo-4", "logo-5", "quote-1"]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "eyebrow": "What Our Customers Say",
+        "heading": "Loved by Thousands"
+      },
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "The quality is exceptional. I've never owned anything quite like it — the craftsmanship speaks for itself. Truly a luxury experience from purchase to delivery.",
+            "author": "Sophia L.",
+            "author_title": "Verified Customer",
+            "rating": 5
+          }
+        },
+        "testimonial-2": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "From the moment it arrived, I knew this was something special. The packaging alone told me everything about the brand's values.",
+            "author": "Marcus T.",
+            "author_title": "Verified Customer",
+            "rating": 5
+          }
+        },
+        "testimonial-3": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "I've been searching for this level of quality for years. The attention to detail is extraordinary. This is my fifth purchase and each one has been perfect.",
+            "author": "Isabelle R.",
+            "author_title": "Loyal Customer",
+            "rating": 5
+          }
+        }
+      },
+      "blocks_order": ["testimonial-1", "testimonial-2", "testimonial-3"]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "eyebrow": "Join the Family",
+        "heading": "Be the First to Know",
+        "subheading": "Subscribe for exclusive access to new arrivals, private sales, and editorial stories.",
+        "email_placeholder": "Enter your email address",
+        "button_label": "Subscribe",
+        "disclaimer": "By subscribing, you agree to receive marketing emails. Unsubscribe anytime.",
+        "show_trust_badges": true,
+        "background_color": "dark",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "slideshow",
+    "featured",
+    "collection-grid",
+    "image-text",
+    "brand-timeline",
+    "press",
+    "testimonials",
+    "newsletter"
+  ]
+}

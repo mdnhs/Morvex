@@ -1,0 +1,177 @@
+{% comment %}
+  Rich Text section — editorial centered text block with optional button.
+{% endcomment %}
+
+{%- liquid
+  assign alignment_class = 'rich-text--center'
+  case section.settings.text_alignment
+    when 'left'
+      assign alignment_class = 'rich-text--left'
+    when 'right'
+      assign alignment_class = 'rich-text--right'
+  endcase
+
+  assign bg_color = section.settings.background_color | default: '#f8f7f5'
+-%}
+
+<section
+  class="rich-text section {{ alignment_class }}"
+  id="section-rich-text-{{ section.id }}"
+  style="background-color: {{ bg_color }}; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;"
+  aria-label="{{ section.settings.heading | default: 'Editorial text' | escape }}"
+>
+  <div class="container">
+    <div class="rich-text__inner fade-in">
+
+      {%- if section.settings.eyebrow != blank -%}
+        <p style="
+          display:inline-block;
+          font-size:var(--text-xs);
+          letter-spacing:0.18em;
+          text-transform:uppercase;
+          font-weight:var(--weight-medium);
+          color:var(--color-accent);
+          margin-bottom:var(--space-4);
+        ">
+          {{ section.settings.eyebrow }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="rich-text__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.show_divider -%}
+        <div class="divider" aria-hidden="true"></div>
+      {%- endif -%}
+
+      {%- if section.settings.body != blank -%}
+        <div class="rich-text__body richtext">
+          {{ section.settings.body }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a
+          href="{{ section.settings.button_link | default: '#' }}"
+          class="btn{% if section.settings.button_style == 'primary' %} btn--primary{% elsif section.settings.button_style == 'ghost' %} btn--ghost{% else %} btn--secondary{% endif %}"
+        >
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich Text",
+  "tag": "section",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Crafted with Intention"
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body text",
+      "default": "<p>Every piece in our collection is crafted with the utmost care and attention to detail. We believe that true luxury lies not just in the materials, but in the story behind each creation — a story of skilled hands, generations of knowledge, and a devotion to the art of making.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "default": true,
+      "label": "Show accent divider"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        { "value": "primary", "label": "Primary (gold filled)" },
+        { "value": "secondary", "label": "Secondary (dark filled)" },
+        { "value": "ghost", "label": "Ghost (outlined)" }
+      ],
+      "default": "ghost"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f7f5"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 20,
+      "max": 160,
+      "step": 8,
+      "default": 96,
+      "unit": "px",
+      "label": "Top padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 20,
+      "max": 160,
+      "step": 8,
+      "default": 96,
+      "unit": "px",
+      "label": "Bottom padding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich Text",
+      "settings": {
+        "heading": "Crafted with Intention",
+        "text_alignment": "center"
+      }
+    }
+  ]
+}
+{% endschema %}

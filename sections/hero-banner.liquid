@@ -1,0 +1,237 @@
+{% comment %}
+  Hero Banner section — full-width with image background, centered content, CTA.
+  Supports transparent header overlay.
+{% endcomment %}
+
+{%- liquid
+  assign height_class = 'hero--full'
+  case section.settings.height
+    when 'large'
+      assign height_class = 'hero--large'
+    when 'medium'
+      assign height_class = 'hero--medium'
+  endcase
+
+  assign text_color_class = 'hero--dark'
+  if section.settings.text_color == 'dark'
+    assign text_color_class = 'hero--light'
+  endif
+-%}
+
+<section
+  class="hero {{ height_class }} {{ text_color_class }}"
+  aria-label="{{ section.settings.heading | default: 'Hero banner' | escape }}"
+  id="section-hero-{{ section.id }}"
+>
+
+  <!-- Background Media -->
+  {%- if section.settings.image != blank -%}
+    <div class="hero__media">
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        srcset="
+          {{ section.settings.image | image_url: width: 750 }} 750w,
+          {{ section.settings.image | image_url: width: 1100 }} 1100w,
+          {{ section.settings.image | image_url: width: 1500 }} 1500w,
+          {{ section.settings.image | image_url: width: 1920 }} 1920w
+        "
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | default: section.settings.heading | escape }}"
+        loading="eager"
+        fetchpriority="high"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    </div>
+  {%- else -%}
+    <div class="hero__media" style="background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);"></div>
+  {%- endif -%}
+
+  <!-- Overlay -->
+  <div
+    class="hero__overlay"
+    style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+    aria-hidden="true"
+  ></div>
+
+  <!-- Content -->
+  <div class="hero__content">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="hero__eyebrow fade-in" style="
+        {%- if section.settings.text_color == 'white' -%}color:rgba(255,255,255,0.8);{%- endif -%}
+      ">
+        {{ section.settings.eyebrow }}
+      </p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="hero__title fade-in fade-in--delay-1">
+        {{ section.settings.heading }}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="hero__subtitle fade-in fade-in--delay-2">
+        {{ section.settings.subheading }}
+      </p>
+    {%- endif -%}
+
+    <div class="hero__actions fade-in fade-in--delay-3">
+      {%- if section.settings.button_label != blank -%}
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="btn btn--ghost-white btn--lg"
+        >
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.secondary_button_label != blank -%}
+        <a
+          href="{{ section.settings.secondary_button_link | default: routes.collections_url }}"
+          class="btn btn--ghost-white btn--lg"
+          style="background:transparent;border-color:rgba(255,255,255,0.5);"
+        >
+          {{ section.settings.secondary_button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  {%- if section.settings.show_scroll_indicator and section.settings.height == 'full' -%}
+    <div class="hero__scroll-indicator" aria-hidden="true">
+      <svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="1" y="1" width="22" height="34" rx="11" stroke="currentColor" stroke-width="1.5"/>
+        <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <animate attributeName="y2" values="16;22;16" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite"/>
+        </line>
+      </svg>
+    </div>
+  {%- endif -%}
+
+</section>
+
+{% schema %}
+{
+  "name": "Hero Banner",
+  "tag": "section",
+  "class": "section-hero-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "default": 30,
+      "unit": "%",
+      "label": "Image overlay opacity"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "New Season"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "New Collection"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover timeless luxury pieces crafted for the modern individual."
+    },
+    {
+      "type": "header",
+      "content": "Primary button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary button"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Section height",
+      "options": [
+        { "value": "full", "label": "Full viewport (100vh)" },
+        { "value": "large", "label": "Large (80vh)" },
+        { "value": "medium", "label": "Medium (60vh)" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text color",
+      "options": [
+        { "value": "white", "label": "White" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "white"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "default": true,
+      "label": "Show scroll indicator"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Banner",
+      "settings": {
+        "heading": "New Collection",
+        "subheading": "Discover timeless luxury pieces crafted for the modern individual.",
+        "button_label": "Shop the Collection",
+        "height": "full",
+        "overlay_opacity": 30
+      }
+    }
+  ]
+}
+{% endschema %}

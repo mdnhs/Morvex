@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ffffff">
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32 }}">
+  {%- endif -%}
+
+  {%- unless settings.type_header_font.system? -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {%- endunless -%}
+
+  <!-- Google Fonts: Instrument Sans + Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+    media="print"
+    onload="this.media='all'"
+  >
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  </noscript>
+
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {% if settings.page_width %}
+    <style>
+      :root {
+        --page-width: {{ settings.page_width }}px;
+      }
+    </style>
+  {% endif %}
+
+  {% if settings.color_background %}
+    <style>
+      :root {
+        --color-background: {{ settings.color_background }};
+        --color-text: {{ settings.color_text }};
+        --color-accent: {{ settings.color_accent }};
+        --color-button: {{ settings.color_button }};
+        --color-button-text: {{ settings.color_button_text }};
+      }
+    </style>
+  {% endif %}
+
+  <!-- Theme Stylesheet -->
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ 'component-product-card.css' | asset_url | stylesheet_tag }}
+
+  <!-- Shopify Required Head Content -->
+  {{ content_for_header }}
+
+  <script>
+    // Expose theme config to JS
+    window.Prestige = {
+      moneyFormat: {{ shop.money_format | json }},
+      cartType: 'drawer',
+      locale: {{ request.locale.iso_code | json }},
+      routes: {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        search_url: '{{ routes.search_url }}',
+      }
+    };
+
+    // Remove no-js class
+    document.documentElement.classList.remove('no-js');
+    document.documentElement.classList.add('js');
+  </script>
+</head>
+
+<body class="template-{{ template.name | handle }}{% if template.suffix != blank %} template-{{ template.name | handle }}--{{ template.suffix | handle }}{% endif %}">
+
+  <!-- Skip to content link for accessibility -->
+  <a class="visually-hidden" href="#MainContent" style="
+    position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;
+    &:focus{position:fixed;top:0;left:0;width:auto;height:auto;padding:1rem 1.5rem;
+    background:#c9a96e;color:#fff;font-size:1rem;z-index:9999;left:-9999px;}
+  ">
+    Skip to content
+  </a>
+
+  {%- if settings.show_announcement_bar and settings.announcement_text != blank -%}
+    <div class="announcement-bar" role="complementary">
+      <p>
+        {%- if settings.announcement_link != blank -%}
+          <a href="{{ settings.announcement_link }}">{{ settings.announcement_text }}</a>
+        {%- else -%}
+          {{ settings.announcement_text }}
+        {%- endif -%}
+      </p>
+    </div>
+  {%- endif -%}
+
+  <!-- Header -->
+  {% section 'header' %}
+
+  <!-- Main Content -->
+  <main id="MainContent" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  <!-- Footer -->
+  {% section 'footer' %}
+
+  <!-- Cart Drawer -->
+  {%- render 'cart-drawer' -%}
+
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay cart-drawer-overlay" id="mobile-nav-overlay" aria-hidden="true"></div>
+
+  <!-- Toast Notification Container (injected by JS) -->
+
+  <!-- Theme JavaScript -->
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+</body>
+</html>
