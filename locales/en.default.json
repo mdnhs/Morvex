@@ -38,7 +38,8 @@
       "start_shopping": "Start Shopping",
       "items_in_cart": "Items in your cart",
       "close": "Close cart",
-      "item_count": "{{ count }} items"
+      "item_count": "{{ count }} items",
+      "items": "items"
     },
     "search": {
       "title": "Search",
@@ -63,7 +64,8 @@
       "navigation": "Main navigation",
       "mobile_navigation": "Mobile navigation",
       "account": "Account",
-      "login": "Log in"
+      "login": "Log in",
+      "menu": "Menu"
     },
     "footer": {
       "navigation": "Navigation",

@@ -20,7 +20,7 @@
   <div class="header__inner">
 
     <!-- Left Navigation -->
-    <nav class="header__nav" role="navigation" aria-label="{{ 'header.navigation' | t | default: 'Main navigation' }}">
+    <nav class="header__nav" role="navigation" aria-label="{{ 'sections.header.navigation' | t | default: 'Main navigation' }}">
       <ul class="header__nav-list" role="list">
         {%- for link in linklists[menu].links -%}
           {%- if link.links != blank -%}
@@ -101,7 +101,7 @@
           <a
             href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}"
             class="header__action-btn"
-            aria-label="{%- if customer -%}{{ 'header.account' | t | default: 'Account' }}{%- else -%}{{ 'header.login' | t | default: 'Log in' }}{%- endif -%}"
+            aria-label="{%- if customer -%}{{ 'sections.header.account' | t | default: 'Account' }}{%- else -%}{{ 'sections.header.login' | t | default: 'Log in' }}{%- endif -%}"
           >
             {%- render 'icon', icon: 'account', size: 20 -%}
           </a>
@@ -162,7 +162,7 @@
       <button
         class="header__menu-toggle"
         type="button"
-        aria-label="{{ 'header.menu' | t | default: 'Menu' }}"
+        aria-label="{{ 'sections.header.menu' | t | default: 'Menu' }}"
         aria-expanded="false"
         aria-controls="mobile-navigation"
       >
@@ -180,7 +180,7 @@
   id="mobile-navigation"
   class="mobile-nav"
   role="navigation"
-  aria-label="{{ 'header.mobile_navigation' | t | default: 'Mobile navigation' }}"
+  aria-label="{{ 'sections.header.mobile_navigation' | t | default: 'Mobile navigation' }}"
 >
   <ul class="mobile-nav__list" role="list">
     {%- for link in linklists[menu].links -%}
@@ -218,7 +218,7 @@
         style="display:flex;align-items:center;gap:0.75rem;font-size:0.875rem;padding:0.75rem 0;color:var(--color-text-light);"
       >
         {%- render 'icon', icon: 'account', size: 18 -%}
-        {%- if customer -%}{{ 'header.account' | t | default: 'My Account' }}{%- else -%}{{ 'header.login' | t | default: 'Log In' }}{%- endif -%}
+        {%- if customer -%}{{ 'sections.header.account' | t | default: 'My Account' }}{%- else -%}{{ 'sections.header.login' | t | default: 'Log In' }}{%- endif -%}
       </a>
     {%- endif -%}
     <a
@@ -235,6 +235,20 @@
 {%- unless is_transparent -%}
   <div class="header-spacer" aria-hidden="true"></div>
 {%- endunless -%}
+
+<script>
+(function(){
+  var ls = document.getElementById('locale-selector-{{ section.id }}');
+  if (!ls) return;
+  var btn = ls.querySelector('.locale-selector__btn');
+  btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var open = ls.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', open);
+  });
+  document.addEventListener('click', function(){ ls.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); });
+})();
+</script>
 
 {% schema %}
 {
@@ -318,17 +332,3 @@
   ]
 }
 {% endschema %}
-
-<script>
-(function(){
-  var ls = document.getElementById('locale-selector-{{ section.id }}');
-  if (!ls) return;
-  var btn = ls.querySelector('.locale-selector__btn');
-  btn.addEventListener('click', function(e){
-    e.stopPropagation();
-    var open = ls.classList.toggle('is-open');
-    btn.setAttribute('aria-expanded', open);
-  });
-  document.addEventListener('click', function(){ ls.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); });
-})();
-</script>
